@@ -1,13 +1,11 @@
 'use client'
 import { sendForm } from './GetForm'
-import { Employee } from '../../types'
+import { useContext } from 'react';
+import { EmployeesContext } from '../../context/EmployeesContext';
 
-// Типизируем пропсы с функцией обновления состояния
-interface AddingEmployeesProps {
-  setEmployees: React.Dispatch<React.SetStateAction<Employee[]>>
-}
+export const AddingEmployees = () => {
+  const { setEmployees } = useContext(EmployeesContext);
 
-export const AddingEmployees = ({ setEmployees }: AddingEmployeesProps) => {
   const handleAction = async (formData: FormData) => {
     try {
       const newEmployee = await sendForm(formData)

@@ -1,35 +1,48 @@
-import { Employer } from "./Employer"
-import { Employee } from "../../types"
+import { Employer } from "./Employer";
+import { useContext } from "react";
+import { EmployeesContext } from "../../context/EmployeesContext";
 
-// Типизируем пропсы, включая функцию setEmployees
-interface EmployeesListProps {
-  employees: Employee[] | undefined;
-  setEmployees: React.Dispatch<React.SetStateAction<Employee[]>>;
-}
+export const EmployeesList = () => {
+  const { employees, filter, searchValue, setEmployees } = useContext(EmployeesContext);
 
-export const EmployeesList = ({employees, setEmployees}: EmployeesListProps) => {
+    const filteredEmployees = employees.filter((employees) => {
+    if (filter === "raise") return employees.isRaising;
+    if (filter === "salary") return employees.salary > 1000;
+    return true;
+  });
+
+  const getFilteredEmployees = (employeesList: any[], searchValue: string) => {
+    if (searchValue.length === 0) return employeesList;
+    return employeesList.filter((item) => 
+      item.name.toLowerCase().includes(searchValue.toLowerCase())
+    );
+  };
+
+  const employeesActual = getFilteredEmployees(filteredEmployees, searchValue);
 
   const handleDelete = (id: number) => {
-    setEmployees(prev => prev.filter(employees => employees.id !== id));
+    setEmployees((prev) => prev.filter((employee) => employee.id !== id));
   };
 
   const handleToggleRaise = (id: number) => {
-    if (!employees) return;
-    setEmployees(employees.map(emp =>
-      emp.id === id ? { ...emp, isRaising: !emp.isRaising } : emp
-    ));
+    setEmployees((prev) =>
+      prev.map((emp) =>
+        emp.id === id ? { ...emp, isRaising: !emp.isRaising } : emp
+      )
+    );
   };
 
   return (
     <ul>
-        {employees && employees.map((item) => (
-          <Employer 
-            key = {item.id} 
-            {...item} 
-            onDelete={handleDelete} 
+      {employeesActual &&
+        employeesActual.map((item) => (
+          <Employer
+            key={item.id}
+            {...item}
+            onDelete={handleDelete}
             onToggleRaise={handleToggleRaise}
           />
-        ))}       
+        ))}
     </ul>
-  )
-}
+  );
+};

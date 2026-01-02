@@ -1,21 +1,16 @@
-import type { Dispatch, SetStateAction } from 'react';
-import { FilterType } from '../../types';
+import { useContext } from 'react'
+import { FilterType } from '../../types'
+import { EmployeesContext } from '../../context/EmployeesContext'
 
-interface Filter {
-  id: string;
-  name: string;
-}
+const filters = [
+  { id: "all", name: "Все сотрудники" },
+  { id: "raise", name: "На повышение" },
+  { id: "salary", name: "З/П больше 1000$" }
+];
 
-//Интерфейс пропсов с типизацией фильтра и функции setFilter
-interface FilterEmployeesProps {
-  filters: Filter[];
-  filter: FilterType;
-  setFilter: (filter: FilterType) => void;
-  searchValue : string;
-  setSearchValue: Dispatch<SetStateAction<string>>;
-}
-
-export const FilterEmployees = ({filters, setFilter, filter, searchValue, setSearchValue}: FilterEmployeesProps) => {
+export const FilterEmployees = () => {
+  const { filter, setFilter, searchValue, setSearchValue } = useContext(EmployeesContext)
+  
   return (
     <div className="search">
         <input 
