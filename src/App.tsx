@@ -5,6 +5,12 @@ import { FilterEmployees } from "./components/Filter";
 import "./index.css";
 
 function App() {
+  const isError = false;
+
+  if (isError) {
+    throw new Error("Something went wrong");
+  }
+
   return (
     <section>
       <Information />
